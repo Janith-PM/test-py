@@ -1,4 +1,5 @@
-#Part - 2
+#Part - 4
+
 # function for check range
 
 
@@ -17,19 +18,32 @@ def checkTotal(pass_, defer, fail):
     else:
         return False
 
+
 # function for predict
+reretrieverCount = 0
+excludeCount = 0
+trailerCount = 0
+ProgressCount = 0
 
 
 def predict(pass_=0, defer=0, fail=0):
+    global reretrieverCount
+    global excludeCount
+    global trailerCount
+    global ProgressCount
     if(checkTotal(pass_, defer, fail)):
         if (pass_ == 120 and defer == 0 and fail == 0):
             print('Progress')
+            ProgressCount += 1
         elif(pass_ == 100 and 0 <= defer <= 20 and 0 <= fail <= 20):
             print('Progress (module trailer)')
+            trailerCount += 1
         elif(0 <= pass_ <= 40 and 0 <= defer <= 40 and 80 <= fail <= 120):
             print('Exclude')
+            excludeCount += 1
         elif(0 <= pass_ <= 80 and 0 <= defer <= 120 and 0 <= fail <= 60):
             print('Do not progress - module retriever')
+            reretrieverCount += 1
         else:
             print('error : invalied Entry')
     else:
@@ -80,6 +94,50 @@ def getInput():
     return pass_, defer, fail
 
 
+# Horizontal HIstrogram
+def horizontalHistrogram():
+    print('-' * 100)
+    print('Horizotal Histrogram\n')
+    print(f'Prograss {ProgressCount} : ', '*' * ProgressCount)
+    print(f'Trailer {trailerCount} : ', '*' * trailerCount)
+    print(f'Retriever {reretrieverCount} : ', '*' * reretrieverCount)
+    print(f'Excluded {excludeCount} : ', '*' * excludeCount)
+
+# Vertical Histrogram
+
+
+def verticalHistrogarm():
+    print('-' * 100)
+    print('Vertical Histrogram\n')
+    header = ['Prograss', 'Trailer', 'Retriever', 'Excluded']
+    print(' '.join(header))
+    for x in range(max(ProgressCount, trailerCount, reretrieverCount, excludeCount)):
+        print(" {0}     {1}     {2}     {3}".format(
+            '*   ' if x < ProgressCount else '     ',
+            '*    ' if x < trailerCount else '     ',
+            '*    ' if x < reretrieverCount else '     ',
+            '*    ' if x < excludeCount else '     '
+        ))
+
+
 # function call
-pass_, defer, fail = getInput()
-predict(pass_, defer, fail)
+# main loop
+print('-' * 100)
+print('Staff Version With Historgram\n')
+
+while True:
+    pass_, defer, fail = getInput()
+    predict(pass_, defer, fail)
+    while True:
+        cmd = input(
+            "\nWould you like to enter another set of data? \nEnter 'y' for Yes or 'q' to Quit and view result : ")
+        if cmd.lower() == 'q':
+            horizontalHistrogram()
+            verticalHistrogarm()
+            exit()
+        elif cmd.lower() == 'y':
+            print('')
+            break
+        else:
+            print('[x] Error : Invalied input')
+            continue
