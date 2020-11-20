@@ -19,20 +19,23 @@ class Predict(object):
             return False
 
     def prediction(self, pass_, defer, fail):
-        if(pass_ == 120 and defer == 0 and fail == 0):
-            print('Progress')
-            self.ProgressCount += 1
-        elif(pass_ == 100 and 0 <= defer <= 20 and 0 <= fail <= 20):
-            print('Progress (module trailer)')
-            self.trailerCount += 1
-        elif(0 <= pass_ <= 40 and 0 <= defer <= 40 and 80 <= fail <= 120):
-            print('Exclude')
-            self.excludeCount += 1
-        elif(0 <= pass_ <= 80 and 0 <= defer <= 120 and 0 <= fail <= 60):
-            print('Do not progress - module retriever)')
-            self.reretrieverCount += 1
+        if self.checkTotal(pass_, defer, fail):
+            if(pass_ == 120 and defer == 0 and fail == 0):
+                print('Progress')
+                self.ProgressCount += 1
+            elif(pass_ == 100 and 0 <= defer <= 20 and 0 <= fail <= 20):
+                print('Progress (module trailer)')
+                self.trailerCount += 1
+            elif(0 <= pass_ <= 40 and 0 <= defer <= 40 and 80 <= fail <= 120):
+                print('Exclude')
+                self.excludeCount += 1
+            elif(0 <= pass_ <= 80 and 0 <= defer <= 120 and 0 <= fail <= 60):
+                print('Do not progress - module retriever)')
+                self.reretrieverCount += 1
+            else:
+                print('error : invalied Entry')
         else:
-            print('error : invalied Entry')
+            print('Total Incorrect')
 
     def getInput(self):
         while True:
